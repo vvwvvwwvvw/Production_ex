@@ -31,7 +31,8 @@ namespace Production_ex
         static void Main(string[] args)
         {
             productinfo[] data = new productinfo[31];
-            while (true) {
+            while (true)
+            {
                 Console.WriteLine("# 1 = 생산 계획 입력 2 = 생산 완료 입력 3 = 품목별 생산 실적 분석 4 = 작업장별 생산 실적 분석 0 = 프로그램 종료 #");
                 Console.Write("원하는 작업을 입력하세요");
                 int command = int.Parse(Console.ReadLine());
@@ -39,12 +40,26 @@ namespace Production_ex
                 {
                     break;
                 }
-                switch(command) {
+                switch (command)
+                {
                     case 1:
                         ProductionPlan(data);
                         Console.WriteLine();
                         break;
-
+                    case 2:
+                        CompleteProcess(data);
+                        Console.WriteLine();
+                        break;
+                    case 3:
+                        ProductionSummary(data, command); // 3번일 경우 품목별 정리
+                        Console.WriteLine();
+                        break;
+                    case 4:
+                        ProductionSummary(data, command); // 4번일 경우 작업장별 정리
+                        Console.WriteLine();
+                        break;
+                }
+            }
         }
     }
 }
