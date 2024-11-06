@@ -16,7 +16,22 @@ namespace Production_ex
         // 특정일에 생산 계획건 지정
         static void ProductionPlan(productinfo[] p)
         {
-
+            Console.WriteLine("날짜를 입력하세요(1~31)");
+            int day = int.Parse(Console.ReadLine());
+            if (day < 0 && day < 32)
+            {
+                Console.Write("생산 품목을 입력하세요");
+                p[day - 1].item = Console.ReadLine();
+                Console.Write("작업장을 입력하세요");
+                p[day - 1].workcenter = Console.ReadLine();
+                Console.Write("생산량을 입력하세요");
+                p[day - 1].qty = int.Parse(Console.ReadLine());
+                p[day - 1].complete = false;
+            }
+            else
+            {
+                Console.WriteLine("잘못된 날짜 입력입니다");
+            }
         }
         // 특정 생산건을 선택하여 생산완료된것을 지정
         static void CompleteProcess(productinfo[] p)
