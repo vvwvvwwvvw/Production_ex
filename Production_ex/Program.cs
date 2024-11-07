@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Production_ex
 {
@@ -18,7 +19,7 @@ namespace Production_ex
         {
             Console.WriteLine("날짜를 입력하세요(1~31)");
             int day = int.Parse(Console.ReadLine());
-            if (day < 0 && day < 32)
+            if (0 < day && day < 32)
             {
                 Console.Write("생산 품목을 입력하세요");
                 p[day - 1].item = Console.ReadLine();
@@ -59,7 +60,79 @@ namespace Production_ex
         //생산 계획량 완료량 진척률을 계산해서 보여준다
         static void ProductionSummary(productinfo[] p, int type)
         {
-        
+            Hashtable plan = new Hashtable(); // 항목별 계획량을 저장
+            for (int i = 0; i < 31; i++)
+            {
+                string key;
+                if (type == 3)
+                {
+                    key = p[i].item; // type 가 3인 경우 품목별 정리
+                }
+                else
+                {
+                    key = p[i].workcenter;
+                }
+                if (key == null)
+                {
+                    continue;
+                }
+                else if (plan.ContainsKey(key))
+                {
+                    plan[key] = (int)plan[key] + p[i].qty; // 기존값에 합산
+                }
+                else
+                {
+                    plan.Add(key, p[i].qty); // 수량 등록
+                }
+            }
+            Hashtable complete = new Hashtable(); // 항목별 완료량 저장
+            for (int i = 0; i < 31; i++)
+            {
+                string key;
+                if (type == 3)
+                {
+                    key = p[i].item;
+                }
+                else
+                {
+                    key = p[i].workcenter;
+                }
+                if (key == null)
+                {
+                    continue;
+                }
+                else if (p[i].complete == false)
+                {
+                    continue;
+                }
+                else if (complete.ContainsKey(key))
+                {
+                    complete[key] = (int)complete[key] + p[i].qty; // 기존값에 합산
+                }
+                else
+                {
+                    complete.Add(key, p[i].qty); // 수량등록
+                }
+            }
+            foreach (DictionaryEntry cs in plan)
+            {
+                string name = (string)cs.Key;
+                int planQty = (int)cs.Value; // 계획량 가져오기
+                int completeQty = 0;
+                if (complete.ContainsKey(name))
+                {
+                    completeQty = (int)complete[name]; // 완료량이 있으면 가져오기
+                }
+                double rate = completeQty * 100.0 / planQty; // 진척률 계산 하기
+                if (type == 3)
+                {
+                    Console.WriteLine("{0} 품목 생산 계획량 = {1}, 완료량 ={2}, 진척률 = {3,2:F}%", name, planQty, completeQty, rate);
+                }
+                else
+                {
+                    Console.WriteLine("{0} 작업장 생산 계획량 = {1}, 완료량 ={2}, 진척률 = {3,2:F}%", name, planQty, completeQty, rate);
+                }
+            }
         }
         static void Main(string[] args)
         {
