@@ -36,7 +36,25 @@ namespace Production_ex
         // 특정 생산건을 선택하여 생산완료된것을 지정
         static void CompleteProcess(productinfo[] p)
         {
-        
+            Console.Write("생산 계획이 입력된 날짜는");
+            for (int i = 0; i < 31; i++)
+            {
+                if (p[i].qty > 0 && p[i].complete == false)
+                {
+                    Console.Write("{0},", i + 1);
+                }
+            }
+            Console.WriteLine("입니다");
+            Console.Write("생산 완료된 생산 계획건 날짜를 입력해 주세요");
+            int day = int.Parse(Console.ReadLine());
+            if (0 < day && day < 32)
+            {
+                p[day - 1].complete = true;
+            }
+            else
+            {
+                Console.WriteLine("잘못된 날짜입력입니다");
+            }
         }
         //생산 계획량 완료량 진척률을 계산해서 보여준다
         static void ProductionSummary(productinfo[] p, int type)
